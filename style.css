@@ -1,0 +1,113 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f9;
+}
+
+.chat-container {
+  width: 400px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+h1 {
+  text-align: center;
+  background: #6200ea;
+  color: white;
+  padding: 15px;
+  margin: 0;
+}
+
+#chat-box {
+  height: 300px;
+  padding: 10px;
+  overflow-y: auto;
+  background: #f9f9f9;
+  border-bottom: 1px solid #ccc;
+}
+
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.message.system {
+  background: #d1c4e9;
+  color: #6200ea;
+}
+
+.message.user {
+  background: #e1f5fe;
+  text-align: right;
+}
+
+.message.bot {
+  background: #c8e6c9;
+}
+
+.input-container {
+  display: flex;
+  padding: 10px;
+}
+
+#user-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+#send-btn {
+  padding: 10px 20px;
+  background: #6200ea;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#send-btn:hover {
+  background: #3700b3;
+}
+
+.log-box {
+  background-color: #f1f1f1;
+  padding: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  height: 150px;
+  overflow-y: auto;
+  font-family: Consolas, monospace;
+}
+
+#log-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: #f44336;
+}
+
+/* Mới thêm */
+.json-box {
+  background-color: #f1f1f1;
+  padding: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+  height: 150px;
+  overflow-y: auto;
+  font-family: Consolas, monospace;
+}
+
+#json-content {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  color: #2196F3;
+}
