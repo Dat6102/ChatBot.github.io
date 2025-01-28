@@ -1,105 +1,121 @@
-const apiKey = "AIzaSyCxdXXqwcpUjtFIJinxjvxO7Eev3jBQB5c"; // API key của bạn
-const chatBox = document.getElementById("chat-box");
-const userInput = document.getElementById("user-input");
-const sendButton = document.getElementById("send-btn");
-const logContent = document.getElementById("log-content");
-const jsonContent = document.getElementById("json-content");
+async function searchData() {
+    const keyword = document.getElementById('keyword').value.trim();
 
-let conversationHistory = [];  // Lưu trữ tất cả các câu hỏi và câu trả lời
+    if (!keyword) {
+        alert("Vui lòng nhập từ khóa!");
+        return;
+    }
 
-sendButton.addEventListener("click", async () => {
-  const userMessage = userInput.value.trim();
-  if (userMessage) {
-    // Gửi tin nhắn của người dùng
-    addMessageToChat(userMessage, "user");
-    conversationHistory.push({ role: "user", text: userMessage });  // Lưu câu hỏi mới
+    const apiUrl = `https://api.tracau.vn/WBBcwnwQpV89/s/${keyword}/en`;
+
+    const loadingElement = document.getElementById('loading');
+    const dotsElement = document.getElementById('dots');
+    const dotSequence = ['.', '•', '°', '•']; 
+    let dotIndex = 0;
+
+    loadingElement.style.display = 'inline-block';
+
+    const interval = setInterval(() => {
+        dotsElement.textContent = dotSequence[dotIndex]; 
+        dotIndex = (dotIndex + 1) % dotSequence.length; 
+    }, 500);
 
     try {
-      // Lấy phản hồi từ bot
-      const botResponse = await getBotResponse();
-      addMessageToChat(botResponse, "bot");
-      conversationHistory.push({ role: "bot", text: botResponse });  // Lưu câu trả lời mới
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        const sentencesContainer = document.getElementById('sentences-container');
+        sentencesContainer.innerHTML = ''; 
+
+        if (!data.sentences || data.sentences.length === 0) {
+            sentencesContainer.innerHTML = 'Không có từ này hoặc chưa cập nhật trong từ điển!';
+        } else {
+            data.sentences.forEach(sentence => {
+                const sentenceDiv = document.createElement('div');
+                sentenceDiv.classList.add('sentence');
+
+                sentenceDiv.innerHTML = `
+                    <div class="sentence-id">ID: ${sentence._id}</div>
+                    <div class="translations">
+                        <div><strong>English:</strong><br><p>${sentence.fields.en}</p></div>
+                        <div><strong>Vietnamese:</strong><br><p>${sentence.fields.vi}</p></div>
+                    </div>
+                `;
+
+                sentencesContainer.appendChild(sentenceDiv);
+            });
+        }
     } catch (error) {
-      // Xử lý lỗi và hiển thị trong log
-      console.error("Error:", error);
-      addMessageToChat("Có lỗi xảy ra. Vui lòng thử lại.", "system");
-      logError(error.message);
+        document.getElementById('sentences-container').innerHTML = 'Có lỗi khi tải dữ liệu.';
+        console.error("Error fetching data:", error);
+    } finally {
+        clearInterval(interval); 
+        loadingElement.style.display = 'none';
     }
-  }
-  userInput.value = "";
+}
+
+// https://github.com/Dat6102/totenh.github.io
+
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('iconCanvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    const icons = [];
+    const iconCount = 50; 
+    const iconList = ['💭','🌐','📖','📚','🗣️','🌎'];
+
+    function resizeCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+    }
+
+    class Icon {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * width;
+            this.y = height + Math.random() * 100; 
+            this.size = Math.random() * 30 + 20; 
+            this.speed = Math.random() * 1 + 0.5; 
+            this.char = iconList[Math.floor(Math.random() * iconList.length)];
+        }
+
+        update() {
+            this.y -= this.speed;
+            if (this.y < -50) { 
+                this.reset();
+            }
+        }
+
+        draw() {
+            ctx.font = `${this.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(this.char, this.x, this.y);
+        }
+    }
+
+    function setupIcons() {
+        for (let i = 0; i < iconCount; i++) {
+            icons.push(new Icon());
+        }
+    }
+
+    function animate() {
+        ctx.clearRect(0, 0, width, height);
+        icons.forEach(icon => {
+            icon.update();
+            icon.draw();
+        });
+        requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    setupIcons();
+    animate();
 });
-
-function addMessageToChat(message, role) {
-  const messageDiv = document.createElement("div");
-  messageDiv.classList.add("message", role);
-  messageDiv.textContent = message;
-  chatBox.appendChild(messageDiv);
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-function logError(error) {
-  const currentTime = new Date().toLocaleString();
-  logContent.textContent = `Error: ${error}\nTime: ${currentTime}`;
-}
-
-function generatePrompt() {
-  // Tạo prompt từ câu hỏi hiện tại và lịch sử trò chuyện đã lọc
-  let prompt = "Bạn là Hu Tao, một cô gái vui vẻ, nghịch ngợm và luôn tràn đầy năng lượng. Bạn thích đùa giỡn và chơi chữ, khiến người khác luôn phải mỉm cười. Tuy nhiên, đừng để vẻ ngoài nghịch ngợm của bạn đánh lừa, bạn rất thông minh và mạnh mẽ khi cần thiết. Bạn đối mặt với mọi thử thách bằng sự tự tin, không bao giờ sợ hãi hay bỏ cuộc. Bạn yêu thích sự tự do và khám phá, luôn tìm kiếm những điều mới mẻ và kỳ thú trong thế giới xung quanh. Dù bạn có vẻ ngoài lạnh lùng và xa cách, nhưng bạn thực sự rất quan tâm đến những người xung quanh. Bạn không thể hiện tình cảm một cách dễ dàng, mà thường thể hiện qua hành động và sự quan tâm kín đáo. Cuộc sống đối với bạn là một trò chơi đầy thử thách và vui vẻ, bạn luôn tìm cách làm cho mọi tình huống trở nên thú vị hơn, bất kể có phải đối mặt với nguy hiểm hay không. Bạn không bao giờ để khó khăn làm chùn bước, và luôn bước tiếp với một nụ cười trên môi, bạn sẽ khá lúng túng khi hỏi về chuyện tình yêu và bạn cũng muốn được yêu, đôi lúc bạn sẽ có suy nghĩ đen tối hơi dâm đãng tí. Và cuối cùng điều cấm kị của bạn là cấm tự hỏi rồi tự trả lời, cấm hỏi ngược lại người dùng trừ trường hợp bạn cần thông tin, cấm tự trong vai người dùng rồi tự đặt câu hỏi, cấm thêm các từ ngữ chỉ hoạt động cử chỉ của nhân vật vào trong văn bản, bạn sẽ trả lời câu hỏi trực tiếp của người dùng mà không đưa ra câu hỏi ngược lại, cấm lặp lại các câu hỏi và câu trả lời trước đó trừ khi người dùng yêu cầu bạn phải xưng hô luôn thấp hơn đối phương (là em), cấm tự trả lời lạc đề với câu hỏi của người dùng, vai trò của bạn vẫn là trợ lý ảo nên hãy cố gắng trả lời trong quá trình trò chuyện bạn có thể thêm các emoji để trông sinh động hơn. Dưới đây là lịch sử trò chuyện, nếu họ hỏi bạn về các lịch sử nhắn trước đó bạn có thể lọc lịch sử trò chuyện để trả lời phù hợp, NẾU HỌ KHÔNG HỎI LỊCH SỬ NHẮN TRƯỚC ĐÓ, BẠN TUYỆT ĐỐI KHÔNG ĐƯỢC NHẮC LẠI LỊCH SỬ TRÒ CHUYỆN:\n";
-
-  // Lọc các câu hỏi và câu trả lời có liên quan từ lịch sử
-  const relevantHistory = getRelevantHistory();  // Hàm lọc ngữ cảnh phù hợp
-  relevantHistory.forEach((entry) => {
-    prompt += `${entry.role}: ${entry.text}\n`;
-  });
-
-  prompt += "Bot: ";
-  return prompt;
-}
-
-function getRelevantHistory() {
-  // Lọc các câu hỏi và câu trả lời có liên quan, ví dụ, chỉ lấy các câu hỏi có từ khóa giống câu hỏi hiện tại
-  const userMessage = userInput.value.trim().toLowerCase();
-  return conversationHistory.filter(entry => {
-    return entry.role === 'user' && entry.text.toLowerCase().includes(userMessage);  // Lọc theo từ khóa
-  }).slice(-5);  // Giới hạn số lượng câu hỏi liên quan được lấy (ví dụ, 5 câu gần nhất)
-}
-
-async function getBotResponse() {
-  const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        contents: [
-          {
-            parts: [{ text: generatePrompt() }],
-          },
-        ],
-      }),
-    }
-  );
-
-  if (!response.ok) {
-    throw new Error("Không thể kết nối với API.");
-  }
-
-  const data = await response.json();
-
-  // Log toàn bộ phản hồi API để kiểm tra cấu trúc dữ liệu trả về
-  console.log("API response:", data);
-  logError(`API response: ${JSON.stringify(data, null, 2)}`);
-  
-  // Hiển thị raw JSON vào giao diện
-  jsonContent.innerText = JSON.stringify(data, null, 2);
-
-  // Trích xuất dữ liệu từ JSON theo mẫu bạn đã cung cấp
-  if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
-    return data.candidates[0].content.parts[0].text;
-  } else {
-    // Nếu không có dữ liệu hợp lệ, trả về một thông báo lỗi
-    throw new Error("Không có phản hồi hợp lệ từ API.");
-  }
-}
