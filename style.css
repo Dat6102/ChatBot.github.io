@@ -1,113 +1,145 @@
+@font-face {
+  font-family: 'MyFont'; 
+  src: url('../fonts/Times New Roman.ttf') format('truetype');
+}
+
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f4f4f9;
+    font-family: MyFont;
+    background-color: #fff0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 }
 
-.chat-container {
-  width: 400px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
 }
 
-h1 {
-  text-align: center;
-  background: #6200ea;
-  color: white;
-  padding: 15px;
-  margin: 0;
+.container {
+    background-color: #fff; 
+    border-radius: 8px;
+    padding: 20px;
+    width: 60%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    max-height: 80vh;
+    border: 2px solid #aa0000; 
 }
 
-#chat-box {
-  height: 300px;
-  padding: 10px;
-  overflow-y: auto;
-  background: #f9f9f9;
-  border-bottom: 1px solid #ccc;
+h2 {
+    color: #aa0000; 
+    text-align: center;
 }
 
-.message {
-  margin: 10px 0;
-  padding: 10px;
-  border-radius: 5px;
+.search {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.message.system {
-  background: #d1c4e9;
-  color: #6200ea;
+.search input {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #aa0000; 
+    border-radius: 5px;
+    margin-right: 2px;
+    width: 200px;
+    background-color: #fff0f0; 
+    color: #aa0000; 
+    font-family: MyFont;
 }
 
-.message.user {
-  background: #e1f5fe;
-  text-align: right;
+#search-btn {
+    padding: 10px 15px;
+    background-color: #aa0000; 
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
-.message.bot {
-  background: #c8e6c9;
+.search-button img {
+  width: 20px;
+  height: 20px;
+  margin: 0 auto;
 }
 
-.input-container {
-  display: flex;
-  padding: 10px;
+.search button:hover {
+    background-color: #ff9999; 
 }
 
-#user-input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+.sentence {
+    background-color: #fff0f0; 
+    border: 1px solid #aa0000; 
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    vertical-align: middle;
 }
 
-#send-btn {
-  padding: 10px 20px;
-  background: #6200ea;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.sentence em {
+    color: #aa0000; 
+    font-weight: bold;
+    vertical-align: middle;
 }
 
-#send-btn:hover {
-  background: #3700b3;
+.sentence p {
+    margin: 0;
+    color: #800000; 
+    vertical-align: middle;
 }
 
-.log-box {
-  background-color: #f1f1f1;
-  padding: 10px;
-  margin-top: 20px;
-  border-top: 1px solid #ccc;
-  height: 150px;
-  overflow-y: auto;
-  font-family: Consolas, monospace;
+.translations {
+    display: flex;
+    justify-content: space-between;
 }
 
-#log-content {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: #f44336;
+.translations div {
+    width: 48%;
+    background-color: #fff; 
+    border: 1px solid #aa0000; 
+    border-radius: 5px;
+    padding: 10px;
+    color: #800000; 
 }
 
-/* Mới thêm */
-.json-box {
-  background-color: #f1f1f1;
-  padding: 10px;
-  margin-top: 20px;
-  border-top: 1px solid #ccc;
-  height: 150px;
-  overflow-y: auto;
-  font-family: Consolas, monospace;
+.sentence-id {
+    font-size: 0.8em;
+    color: #800000; 
+    vertical-align: middle;
 }
 
-#json-content {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  color: #2196F3;
+.backtomenu {
+    left: 10px; 
+    top: 10%;
+    padding: 10px 15px;
+    margin: 2px;
+    background-color: #aa0000;
+    color: white;
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+    font-family: MyFont;
+}
+
+.backtomenu:hover {
+    background-color: #ff9999; 
+}
+
+.backtomenu img {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
 }
