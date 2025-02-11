@@ -1,121 +1,72 @@
-async function searchData() {
-    const keyword = document.getElementById('keyword').value.trim();
+document.getElementById('birthdayForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-    if (!keyword) {
-        alert("Vui lòng nhập từ khóa!");
+    const webhookURL = 'https://discord.com/api/webhooks/1282714794465427568/2FGOjbckR5uCT6NrWDrV21F83a5LD4LXsiu6tKzieA_RVHFoU8h-NEDh2eM135hl4KYJ';
+    const name = document.getElementById('name').value.trim() || 'Ẩn danh';
+    const wish = document.getElementById('wish').value.trim();
+    const imageInput = document.getElementById('image');
+    const timestamp = new Date().toISOString();
+
+    if (!wish) {
+        alert('Vui lòng nhập lời chúc.');
         return;
     }
 
-    const apiUrl = `https://api.tracau.vn/WBBcwnwQpV89/s/${keyword}/en`;
+    // Hiển thị thông báo "Đang xử lý, đợi một chút..."
+    showToast('Đang xử lý, đợi một chút...', 'fa fa-spinner fa-spin');
 
-    const loadingElement = document.getElementById('loading');
-    const dotsElement = document.getElementById('dots');
-    const dotSequence = ['.', '•', '°', '•']; 
-    let dotIndex = 0;
+    const formData = new FormData();
+    formData.append('username', name);
+    formData.append('content', `${wish}\n${timestamp}`);
 
-    loadingElement.style.display = 'inline-block';
-
-    const interval = setInterval(() => {
-        dotsElement.textContent = dotSequence[dotIndex]; 
-        dotIndex = (dotIndex + 1) % dotSequence.length; 
-    }, 500);
+    if (imageInput.files[0]) {
+        formData.append('file', imageInput.files[0]);
+    }
 
     try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
+        const response = await fetch(webhookURL, {
+            method: 'POST',
+            body: formData
+        });
 
-        const sentencesContainer = document.getElementById('sentences-container');
-        sentencesContainer.innerHTML = ''; 
-
-        if (!data.sentences || data.sentences.length === 0) {
-            sentencesContainer.innerHTML = 'Không có từ này hoặc chưa cập nhật trong từ điển!';
+        if (response.ok) {
+            showToast('Lời chúc của bạn đã được gửi thành công!', 'fa fa-check-circle');
+            document.getElementById('birthdayForm').reset();
         } else {
-            data.sentences.forEach(sentence => {
-                const sentenceDiv = document.createElement('div');
-                sentenceDiv.classList.add('sentence');
-
-                sentenceDiv.innerHTML = `
-                    <div class="sentence-id">ID: ${sentence._id}</div>
-                    <div class="translations">
-                        <div><strong>English:</strong><br><p>${sentence.fields.en}</p></div>
-                        <div><strong>Vietnamese:</strong><br><p>${sentence.fields.vi}</p></div>
-                    </div>
-                `;
-
-                sentencesContainer.appendChild(sentenceDiv);
-            });
+            showToast('Đã xảy ra lỗi khi gửi lời chúc. Vui lòng thử lại.', 'fa fa-exclamation-circle');
         }
     } catch (error) {
-        document.getElementById('sentences-container').innerHTML = 'Có lỗi khi tải dữ liệu.';
-        console.error("Error fetching data:", error);
-    } finally {
-        clearInterval(interval); 
-        loadingElement.style.display = 'none';
+        console.error('Lỗi:', error);
+        showToast('Đã xảy ra lỗi khi gửi lời chúc. Vui lòng thử lại.', 'fa fa-exclamation-circle');
     }
+});
+
+// Hàm hiển thị thông báo
+function showToast(message, iconClass) {
+    const notifications = document.querySelector('.notifications');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `<i class="${iconClass}"></i><span>${message}</span>`;
+    notifications.appendChild(toast);
+
+    // Tự động ẩn thông báo sau 3 giây
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(100%)';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
 
-// https://github.com/Dat6102/totenh.github.io
+document.addEventListener('DOMContentLoaded', function() {
+    var audio = document.getElementById('background-music');
 
-document.addEventListener('DOMContentLoaded', () => {
-    const canvas = document.getElementById('iconCanvas');
-    const ctx = canvas.getContext('2d');
-    let width, height;
-    const icons = [];
-    const iconCount = 50; 
-    const iconList = ['💭','🌐','📖','📚','🗣️','🌎'];
-
-    function resizeCanvas() {
-        width = window.innerWidth;
-        height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+        // Hàm phát nhạc
+    function playAudio() {
+        audio.play();
+            // Xóa sự kiện sau khi phát nhạc để tránh lặp lại
+        document.removeEventListener('click', playAudio);
     }
 
-    class Icon {
-        constructor() {
-            this.reset();
-        }
-
-        reset() {
-            this.x = Math.random() * width;
-            this.y = height + Math.random() * 100; 
-            this.size = Math.random() * 30 + 20; 
-            this.speed = Math.random() * 1 + 0.5; 
-            this.char = iconList[Math.floor(Math.random() * iconList.length)];
-        }
-
-        update() {
-            this.y -= this.speed;
-            if (this.y < -50) { 
-                this.reset();
-            }
-        }
-
-        draw() {
-            ctx.font = `${this.size}px Arial`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(this.char, this.x, this.y);
-        }
-    }
-
-    function setupIcons() {
-        for (let i = 0; i < iconCount; i++) {
-            icons.push(new Icon());
-        }
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, width, height);
-        icons.forEach(icon => {
-            icon.update();
-            icon.draw();
-        });
-        requestAnimationFrame(animate);
-    }
-
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    setupIcons();
-    animate();
+        // Lắng nghe sự kiện click của người dùng để bắt đầu phát nhạc
+    document.addEventListener('click', playAudio);
 });
