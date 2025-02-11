@@ -1,145 +1,65 @@
 @font-face {
-  font-family: 'MyFont'; 
-  src: url('../fonts/Times New Roman.ttf') format('truetype');
+    font-family: 'MyFont';
+    src: url('./font.ttf') format('truetype');
+    font-display: swap;
+}
+
+html, body {
+  overflow: hidden;
 }
 
 body {
-    font-family: MyFont;
-    background-color: #fff0f0;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+  font-family: 'MyFont', sans-serif;
+  margin: 20px;
+  position: relative;
+  background-image: url('bg.jpg');
 }
 
-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-}
-
-.container {
-    background-color: #fff; 
-    border-radius: 8px;
-    padding: 20px;
-    width: 60%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    max-height: 80vh;
-    border: 2px solid #aa0000; 
-}
-
-h2 {
-    color: #aa0000; 
+h1 {
     text-align: center;
-}
-
-.search {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.search input {
-    padding: 10px;
-    font-size: 1em;
-    border: 1px solid #aa0000; 
-    border-radius: 5px;
-    margin-right: 2px;
-    width: 200px;
-    background-color: #fff0f0; 
-    color: #aa0000; 
+    color: #ff69b4;
     font-family: MyFont;
 }
 
-#search-btn {
-    padding: 10px 15px;
-    background-color: #aa0000; 
+form {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;
+    margin: 0 auto;
+    font-family: MyFont;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    font-family: MyFont;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: MyFont;
+}
+
+button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #ff69b4;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.search-button img {
-  width: 20px;
-  height: 20px;
-  margin: 0 auto;
-}
-
-.search button:hover {
-    background-color: #ff9999; 
-}
-
-.sentence {
-    background-color: #fff0f0; 
-    border: 1px solid #aa0000; 
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    vertical-align: middle;
-}
-
-.sentence em {
-    color: #aa0000; 
-    font-weight: bold;
-    vertical-align: middle;
-}
-
-.sentence p {
-    margin: 0;
-    color: #800000; 
-    vertical-align: middle;
-}
-
-.translations {
-    display: flex;
-    justify-content: space-between;
-}
-
-.translations div {
-    width: 48%;
-    background-color: #fff; 
-    border: 1px solid #aa0000; 
-    border-radius: 5px;
-    padding: 10px;
-    color: #800000; 
-}
-
-.sentence-id {
-    font-size: 0.8em;
-    color: #800000; 
-    vertical-align: middle;
-}
-
-.backtomenu {
-    left: 10px; 
-    top: 10%;
-    padding: 10px 15px;
-    margin: 2px;
-    background-color: #aa0000;
-    color: white;
-    border: none;
-    border-radius: 5px; 
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: transform 0.2s, background-color 0.2s;
+    transition: background-color 0.3s;
     font-family: MyFont;
 }
 
-.backtomenu:hover {
-    background-color: #ff9999; 
+button:hover {
+    background-color: #ff1493;
+    font-family: MyFont;
 }
 
-.backtomenu img {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-}
