@@ -19,6 +19,9 @@ body{
   background-position: center;
   font-family: "Popins";
 }
+html, body {
+    overflow: hidden;
+}
 .wrapper{
   width: 420px;
   background: transparent;
