@@ -1,0 +1,85 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+
+canvas {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1; /* Giá trị thấp để nằm phía sau */
+}
+
+@font-face {
+    font-family: 'CustomFont';
+    src: url('font.ttf'); /* Đường dẫn đến tệp font.ttf */
+}
+
+.text-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    font-family: 'CustomFont', sans-serif;
+    font-size: 40px;
+    color: white;
+    pointer-events: none; /* Không chặn các sự kiện chuột */
+}
+
+.text-overlay span {
+    display: inline-block;
+    margin: 0 2px;
+    animation: float 6s ease-in-out infinite;
+    text-shadow: 
+        0 0 5px #fff, 
+        0 0 10px #fff, 
+        0 0 15px #f0f, 
+        0 0 20px #f0f, 
+        0 0 25px #f0f, 
+        0 0 30px #f0f, 
+        0 0 35px #f0f; /* Hiệu ứng phát sáng */
+}
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0); }
+}
+
+/* Đặt bảng menu ở giữa trang */
+#menuTable {
+    position: relative;
+    z-index: 2; /* Giá trị cao để nằm phía trước */
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+/* Định dạng các ô trong bảng */
+#menuTable td {
+    padding: 10px;
+}
+
+/* Định dạng các nút menu */
+.menuButton {
+    background-color: #ff69b4;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+}
+
+/* Hiệu ứng khi di chuột qua nút */
+.menuButton:hover {
+    background-color: #ff1493;
+}
+
