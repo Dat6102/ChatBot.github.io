@@ -17,6 +17,10 @@ canvas {
     src: url('font.ttf'); /* Đường dẫn đến tệp font.ttf */
 }
 
+html, body {
+    overflow: hidden;
+}
+
 .text-overlay {
     position: absolute;
     top: 50%;
